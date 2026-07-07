@@ -8,6 +8,7 @@ import '../widgets/top_creators_widget.dart';
 import '../widgets/performance_chart.dart';
 import '../widgets/calendar_widget.dart';
 import '../widgets/celebration_cards.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -32,6 +33,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onItemSelected: (index) {
                   setState(() => _selectedNavIndex = index);
                   Navigator.pop(context); // Close drawer on selection
+                },
+              ),
+            )
+          : null,
+      bottomNavigationBar: isMobileView
+          ? StyleProvider(
+              style: Style(), // Custom style if needed, but defaults are fine
+              child: ConvexAppBar(
+                style: TabStyle.fixedCircle,
+                backgroundColor: Colors.white,
+                color: AppColors.textMuted,
+                activeColor: AppColors.primary,
+                items: const [
+                  TabItem(icon: Icons.home_rounded, title: 'Home'),
+                  TabItem(icon: Icons.people_alt_outlined, title: 'Employees'),
+                  TabItem(icon: Icons.format_list_bulleted_rounded, title: 'Attendance'),
+                  TabItem(icon: Icons.calendar_month_outlined, title: 'Summary'),
+                  TabItem(icon: Icons.settings_outlined, title: 'Settings'),
+                ],
+                initialActiveIndex: _selectedNavIndex,
+                onTap: (int i) {
+                  // Map the index 4 to Settings (since items are 0-4 now)
+                  setState(() => _selectedNavIndex = i == 4 ? 5 : i); 
                 },
               ),
             )
@@ -156,8 +180,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ),
-        // Bottom nav for mobile
-        _buildMobileBottomNav(),
       ],
     );
   }
@@ -181,70 +203,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             AnniversaryCard(),
             SizedBox(height: 8),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobileBottomNav() {
-    final items = [
-      (Icons.home_rounded, 'Home', 0),
-      (Icons.people_alt_outlined, 'Employees', 1),
-      (Icons.format_list_bulleted_rounded, 'Attendance', 2),
-      (Icons.calendar_month_outlined, 'Summary', 3),
-      (Icons.settings_outlined, 'Settings', 5),
-    ];
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x12000000),
-            blurRadius: 12,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: items
-                .map(
-                  (item) => GestureDetector(
-                    onTap: () => setState(() => _selectedNavIndex = item.$3),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          item.$1,
-                          size: 22,
-                          color: _selectedNavIndex == item.$3
-                              ? AppColors.primary
-                              : AppColors.textMuted,
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          item.$2,
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: _selectedNavIndex == item.$3
-                                ? AppColors.primary
-                                : AppColors.textMuted,
-                            fontWeight: _selectedNavIndex == item.$3
-                                ? FontWeight.w600
-                                : FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
         ),
       ),
     );
