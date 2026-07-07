@@ -8,7 +8,7 @@ import '../widgets/top_creators_widget.dart';
 import '../widgets/performance_chart.dart';
 import '../widgets/calendar_widget.dart';
 import '../widgets/celebration_cards.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -38,23 +38,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )
           : null,
       bottomNavigationBar: isMobileView
-          ? ConvexAppBar(
-              style: TabStyle.fixedCircle,
+          ? WaterDropNavBar(
               backgroundColor: Colors.white,
-              color: AppColors.textMuted,
-              activeColor: AppColors.primary,
-              items: const [
-                TabItem(icon: Icons.home_rounded, title: 'Home'),
-                TabItem(icon: Icons.people_alt_outlined, title: 'Employees'),
-                TabItem(icon: Icons.format_list_bulleted_rounded, title: 'Attendance'),
-                TabItem(icon: Icons.calendar_month_outlined, title: 'Summary'),
-                TabItem(icon: Icons.settings_outlined, title: 'Settings'),
-              ],
-              initialActiveIndex: _selectedNavIndex,
-              onTap: (int i) {
-                // Map the index 4 to Settings (since items are 0-4 now)
+              waterDropColor: AppColors.primary,
+              bottomPadding: 16, // Optional safe area padding
+              onItemSelected: (int i) {
+                // Map the index 4 to Settings
                 setState(() => _selectedNavIndex = i == 4 ? 5 : i); 
               },
+              selectedIndex: _selectedNavIndex > 4 ? 4 : _selectedNavIndex,
+              barItems: [
+                BarItem(
+                  filledIcon: Icons.home_rounded,
+                  outlinedIcon: Icons.home_outlined,
+                ),
+                BarItem(
+                  filledIcon: Icons.people_alt,
+                  outlinedIcon: Icons.people_alt_outlined,
+                ),
+                BarItem(
+                  filledIcon: Icons.format_list_bulleted_rounded,
+                  outlinedIcon: Icons.format_list_bulleted_outlined,
+                ),
+                BarItem(
+                  filledIcon: Icons.calendar_month,
+                  outlinedIcon: Icons.calendar_month_outlined,
+                ),
+                BarItem(
+                  filledIcon: Icons.settings,
+                  outlinedIcon: Icons.settings_outlined,
+                ),
+              ],
             )
           : null,
       body: LayoutBuilder(
