@@ -15,6 +15,19 @@ class DashboardHeader extends StatelessWidget {
       color: AppColors.headerBg, // blends with page background
       child: Row(
         children: [
+          if (MediaQuery.of(context).size.width < 700) ...[
+            BouncingWidget(
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+              },
+              child: const Icon(
+                Icons.menu_rounded,
+                color: Color(0xFF212036),
+                size: 26,
+              ),
+            ),
+            const SizedBox(width: 16),
+          ],
           // Title "Home"
           Text(
             title,

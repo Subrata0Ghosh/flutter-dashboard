@@ -21,8 +21,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobileView = MediaQuery.of(context).size.width < 700;
+
     return Scaffold(
       backgroundColor: AppColors.mainBg,
+      drawer: isMobileView
+          ? Drawer(
+              child: Sidebar(
+                selectedIndex: _selectedNavIndex,
+                onItemSelected: (index) {
+                  setState(() => _selectedNavIndex = index);
+                  Navigator.pop(context); // Close drawer on selection
+                },
+              ),
+            )
+          : null,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isDesktop = constraints.maxWidth >= 1100;
