@@ -21,59 +21,72 @@ class PerformanceChart extends StatelessWidget {
         ],
       ),
       padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isNarrow = constraints.maxWidth < 350;
+
+          final titleWidget = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Over All Performance',
-                      style: GoogleFonts.inter(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    Text(
-                      'The Years',
-                      style: GoogleFonts.inter(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
+              Text(
+                'Over All Performance',
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
                 ),
               ),
-              const SizedBox(width: 8),
-              // Legend
-              Wrap(
-                spacing: 12,
-                runSpacing: 4,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                alignment: WrapAlignment.end,
-                children: [
-                  _LegendItem(
-                    color: AppColors.chartPending,
-                    label: 'Pending Done',
-                  ),
-                  _LegendItem(
-                    color: AppColors.chartDone,
-                    label: 'Project Done',
-                  ),
-                ],
+              Text(
+                'The Years',
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textSecondary,
+                ),
               ),
             ],
-          ),
-          const SizedBox(height: 20),
-          SizedBox(height: 180, child: LineChart(_buildChartData())),
-        ],
+          );
+
+          final legendWidget = Wrap(
+            spacing: 12,
+            runSpacing: 4,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: isNarrow ? WrapAlignment.start : WrapAlignment.end,
+            children: const [
+              _LegendItem(
+                color: AppColors.chartPending,
+                label: 'Pending Done',
+              ),
+              _LegendItem(
+                color: AppColors.chartDone,
+                label: 'Project Done',
+              ),
+            ],
+          );
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isNarrow) ...[
+                titleWidget,
+                const SizedBox(height: 12),
+                legendWidget,
+              ] else ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: titleWidget),
+                    const SizedBox(width: 8),
+                    legendWidget,
+                  ],
+                ),
+              ],
+              const SizedBox(height: 20),
+              SizedBox(height: 180, child: LineChart(_buildChartData())),
+            ],
+          );
+        },
       ),
     );
   }
