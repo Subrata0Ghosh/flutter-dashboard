@@ -1,5 +1,7 @@
 # adstacks_dashboard
 
+🚀 **Live Demo:** [https://dashboard-b52dc.web.app/](https://dashboard-b52dc.web.app/)
+
 A new Flutter project.
 
 ## Getting Started
