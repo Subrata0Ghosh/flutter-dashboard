@@ -174,7 +174,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const DashboardHeader(title: 'Home'),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 90), // 90 = navbar + bubble overhang clearance
             child: Column(
               children: [
                 const HeroBanner(),
@@ -190,7 +190,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const BirthdayCard(),
                 const SizedBox(height: 16),
                 const AnniversaryCard(),
-                const SizedBox(height: 16),
               ],
             ),
           ),
