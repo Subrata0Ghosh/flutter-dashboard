@@ -25,6 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final isMobileView = MediaQuery.of(context).size.width < 700;
 
     return Scaffold(
+      extendBody: true, // Allows bubble to render above bottom nav bar
       backgroundColor: AppColors.mainBg,
       drawer: isMobileView
           ? Drawer(

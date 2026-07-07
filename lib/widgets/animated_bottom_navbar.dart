@@ -83,138 +83,153 @@ class _AnimatedBottomNavBarState extends State<AnimatedBottomNavBar>
   @override
   Widget build(BuildContext context) {
     final itemCount = widget.items.length;
-    final barHeight = 66.0;
-    final bubbleSize = 52.0;
-    final bubbleLift = 22.0;
+    final barHeight = 58.0;     // Reduced bar height
+    final bubbleSize = 54.0;    // Active circle size
+    final bubbleOverhang = 20.0; // How much the bubble protrudes above the bar
 
-    return Container(
-      height: barHeight + bubbleLift + MediaQuery.of(context).padding.bottom,
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.10),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final totalWidth = constraints.maxWidth;
-          final itemWidth = totalWidth / itemCount;
-
-          return Stack(
-            clipBehavior: Clip.none,
-            children: [
-              // Sliding bubble indicator
-              AnimatedBuilder(
-                animation: _slideController,
-                builder: (context, child) {
-                  final begin = _previousIndex * itemWidth + itemWidth / 2 - bubbleSize / 2;
-                  final end = widget.selectedIndex * itemWidth + itemWidth / 2 - bubbleSize / 2;
-                  final curved = CurvedAnimation(
-                    parent: _slideController,
-                    curve: Curves.easeInOutCubic,
-                  );
-                  final left = begin + (end - begin) * curved.value;
-
-                  return Positioned(
-                    left: left,
-                    top: 0,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: Container(
-                        width: bubbleSize,
-                        height: bubbleSize,
-                        decoration: BoxDecoration(
-                          color: widget.bubbleColor,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: widget.bubbleColor.withValues(alpha: 0.45),
-                              blurRadius: 16,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          widget.items[widget.selectedIndex].activeIcon,
-                          color: widget.activeColor,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  );
-                },
+    return SizedBox(
+      height: barHeight + MediaQuery.of(context).padding.bottom,
+      child: Stack(
+        clipBehavior: Clip.none, // Allow bubble to render above the bar
+        children: [
+          // The bar background
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: barHeight + MediaQuery.of(context).padding.bottom,
+            child: Container(
+              decoration: BoxDecoration(
+                color: widget.backgroundColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.10),
+                    blurRadius: 20,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
               ),
+            ),
+          ),
 
-              // Tap targets & labels
-              Positioned(
-                bottom: MediaQuery.of(context).padding.bottom,
-                left: 0,
-                right: 0,
-                child: SizedBox(
-                  height: barHeight,
-                  child: Row(
-                    children: List.generate(itemCount, (index) {
-                      final isSelected = index == widget.selectedIndex;
-                      return Expanded(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () => widget.onItemSelected(index),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              // Space for the bubble at top (only for inactive items)
-                              if (!isSelected)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 4),
-                                  child: Icon(
-                                    widget.items[index].icon,
-                                    color: widget.inactiveColor,
-                                    size: 22,
-                                  ),
+          // Sliding bubble (outside the bar)
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final totalWidth = constraints.maxWidth;
+              final itemWidth = totalWidth / itemCount;
+
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // Bubble
+                  AnimatedBuilder(
+                    animation: _slideController,
+                    builder: (context, child) {
+                      final begin = _previousIndex * itemWidth + itemWidth / 2 - bubbleSize / 2;
+                      final end = widget.selectedIndex * itemWidth + itemWidth / 2 - bubbleSize / 2;
+                      final curved = CurvedAnimation(
+                        parent: _slideController,
+                        curve: Curves.easeInOutCubic,
+                      );
+                      final left = begin + (end - begin) * curved.value;
+
+                      return Positioned(
+                        left: left,
+                        top: -bubbleOverhang, // protrudes above bar
+                        child: ScaleTransition(
+                          scale: _scaleAnimation,
+                          child: Container(
+                            width: bubbleSize,
+                            height: bubbleSize,
+                            decoration: BoxDecoration(
+                              color: widget.bubbleColor,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: widget.bubbleColor.withValues(alpha: 0.40),
+                                  blurRadius: 14,
+                                  offset: const Offset(0, 5),
                                 ),
-                              if (isSelected)
-                                const SizedBox(height: 26), // space below bubble
-
-                              // Label
-                              AnimatedOpacity(
-                                opacity: isSelected ? 1.0 : 0.0,
-                                duration: const Duration(milliseconds: 250),
-                                child: AnimatedSlide(
-                                  offset: isSelected ? Offset.zero : const Offset(0, 0.3),
-                                  duration: const Duration(milliseconds: 250),
-                                  curve: Curves.easeOut,
-                                  child: Text(
-                                    widget.items[index].label,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w700,
-                                      color: widget.bubbleColor,
-                                      letterSpacing: 0.2,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 8),
-                            ],
+                              ],
+                            ),
+                            child: Icon(
+                              widget.items[widget.selectedIndex].activeIcon,
+                              color: widget.activeColor,
+                              size: 24,
+                            ),
                           ),
                         ),
                       );
-                    }),
+                    },
                   ),
-                ),
-              ),
-            ],
-          );
-        },
+
+                  // Tap targets, icons and labels
+                  Positioned(
+                    bottom: MediaQuery.of(context).padding.bottom,
+                    left: 0,
+                    right: 0,
+                    child: SizedBox(
+                      height: barHeight,
+                      child: Row(
+                        children: List.generate(itemCount, (index) {
+                          final isSelected = index == widget.selectedIndex;
+                          return Expanded(
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () => widget.onItemSelected(index),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Inactive icon (no icon for active, bubble handles it)
+                                  if (!isSelected)
+                                    Icon(
+                                      widget.items[index].icon,
+                                      color: widget.inactiveColor,
+                                      size: 22,
+                                    ),
+
+                                  // Placeholder for active tab (bubble is above bar)
+                                  if (isSelected)
+                                    const SizedBox(height: 22),
+
+                                  const SizedBox(height: 4),
+
+                                  // Fading label for active tab only
+                                  AnimatedOpacity(
+                                    opacity: isSelected ? 1.0 : 0.0,
+                                    duration: const Duration(milliseconds: 220),
+                                    child: AnimatedSlide(
+                                      offset: isSelected ? Offset.zero : const Offset(0, 0.4),
+                                      duration: const Duration(milliseconds: 220),
+                                      curve: Curves.easeOut,
+                                      child: Text(
+                                        widget.items[index].label,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                          color: widget.bubbleColor,
+                                          letterSpacing: 0.2,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
