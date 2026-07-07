@@ -38,120 +38,117 @@ class DashboardHeader extends StatelessWidget {
             ),
           ),
 
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Search bar - hide on small mobile screens
-                if (MediaQuery.of(context).size.width > 600)
-                  Flexible(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 280),
-                      child: Container(
-                        height: 38,
-                        decoration: BoxDecoration(
-                          color: AppColors
-                              .searchBg, // dark navy background matching crop
-                          borderRadius: BorderRadius.circular(10),
+          const Spacer(),
+
+          // Search bar (Desktop) or Search Icon (Mobile)
+          if (MediaQuery.of(context).size.width > 600)
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 280),
+              child: Container(
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.searchBg,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.8),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                style: GoogleFonts.inter(
-                                  fontSize: 12,
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                ),
-                                decoration: InputDecoration(
-                                  hintText: 'Search',
-                                  hintStyle: GoogleFonts.inter(
-                                    fontSize: 12,
-                                    color: Colors.white.withValues(alpha: 0.5),
-                                  ),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.only(
-                                    bottom: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.search,
-                              color: Colors.white.withValues(alpha: 0.6),
-                              size: 18,
-                            ),
-                          ],
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: Colors.white.withValues(alpha: 0.5),
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(bottom: 12),
                         ),
                       ),
                     ),
-                  ),
+                    Icon(
+                      Icons.search,
+                      color: Colors.white.withValues(alpha: 0.6),
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            BouncingWidget(
+              onTap: () {},
+              child: const Icon(
+                Icons.search,
+                color: Color(0xFF212036),
+                size: 22,
+              ),
+            ),
 
-                const SizedBox(width: 65),
+          SizedBox(width: MediaQuery.of(context).size.width > 600 ? 65 : 14),
 
-                // Clean icons (no containers)
-                BouncingWidget(
-                  onTap: () {},
-                  child: const _HeaderIcon(
-                    icon: Icons.assignment_outlined,
-                    badgeColor: Color(0xFF5B21B6),
-                    hasBadge: true,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                BouncingWidget(
-                  onTap: () {},
-                  child: const _HeaderIcon(
-                    icon: Icons.notifications_none_outlined,
-                    badgeColor: Color(0xFFF59E0B),
-                    hasBadge: true,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                BouncingWidget(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.power_settings_new_rounded,
-                    color: Color(0xFF212036),
-                    size: 22,
-                  ),
-                ),
-                // Add more space for desktop view between power icon and avatar
-                SizedBox(
-                  width: MediaQuery.of(context).size.width > 600 ? 48 : 24,
-                ),
+          // Icons
+          BouncingWidget(
+            onTap: () {},
+            child: const _HeaderIcon(
+              icon: Icons.assignment_outlined,
+              badgeColor: Color(0xFF5B21B6),
+              hasBadge: true,
+            ),
+          ),
+          const SizedBox(width: 14),
+          BouncingWidget(
+            onTap: () {},
+            child: const _HeaderIcon(
+              icon: Icons.notifications_none_outlined,
+              badgeColor: Color(0xFFF59E0B),
+              hasBadge: true,
+            ),
+          ),
+          const SizedBox(width: 14),
+          BouncingWidget(
+            onTap: () {},
+            child: const Icon(
+              Icons.power_settings_new_rounded,
+              color: Color(0xFF212036),
+              size: 22,
+            ),
+          ),
+          
+          SizedBox(width: MediaQuery.of(context).size.width > 600 ? 48 : 16),
 
-                // User avatar with character face with hat
-                BouncingWidget(
-                  onTap: () {},
-                  child: SizedBox(
-                    width: 38,
-                    height: 38,
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xFF2A2D54),
-                          ),
-                        ),
-                        const Positioned(
-                          top: -7,
-                          left: 0,
-                          right: 0,
-                          child: Center(
-                            child: Text(
-                              '🤠', // Hat character emoji matching PDF
-                              style: TextStyle(fontSize: 28),
-                            ),
-                          ),
-                        ),
-                      ],
+          // User avatar
+          BouncingWidget(
+            onTap: () {},
+            child: SizedBox(
+              width: 38,
+              height: 38,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFF2A2D54),
                     ),
                   ),
-                ),
-              ],
+                  const Positioned(
+                    top: -7,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        '🤠',
+                        style: TextStyle(fontSize: 28),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
