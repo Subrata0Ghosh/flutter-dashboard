@@ -8,7 +8,7 @@ import '../widgets/top_creators_widget.dart';
 import '../widgets/performance_chart.dart';
 import '../widgets/calendar_widget.dart';
 import '../widgets/celebration_cards.dart';
-import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
+import '../widgets/animated_bottom_navbar.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -38,35 +38,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )
           : null,
       bottomNavigationBar: isMobileView
-          ? WaterDropNavBar(
-              backgroundColor: Colors.white,
-              waterDropColor: AppColors.primary,
-              bottomPadding: 16, // Optional safe area padding
-              onItemSelected: (int i) {
-                // Map the index 4 to Settings
-                setState(() => _selectedNavIndex = i == 4 ? 5 : i); 
-              },
+          ? AnimatedBottomNavBar(
               selectedIndex: _selectedNavIndex > 4 ? 4 : _selectedNavIndex,
-              barItems: [
-                BarItem(
-                  filledIcon: Icons.home_rounded,
-                  outlinedIcon: Icons.home_outlined,
+              onItemSelected: (int i) {
+                setState(() => _selectedNavIndex = i == 4 ? 5 : i);
+              },
+              bubbleColor: AppColors.primary,
+              inactiveColor: const Color(0xFF9094A6),
+              items: const [
+                NavBarItem(
+                  icon: Icons.home_outlined,
+                  activeIcon: Icons.home_rounded,
+                  label: 'Home',
                 ),
-                BarItem(
-                  filledIcon: Icons.people_alt,
-                  outlinedIcon: Icons.people_alt_outlined,
+                NavBarItem(
+                  icon: Icons.people_alt_outlined,
+                  activeIcon: Icons.people_alt,
+                  label: 'Employees',
                 ),
-                BarItem(
-                  filledIcon: Icons.format_list_bulleted_rounded,
-                  outlinedIcon: Icons.format_list_bulleted_outlined,
+                NavBarItem(
+                  icon: Icons.format_list_bulleted_outlined,
+                  activeIcon: Icons.format_list_bulleted_rounded,
+                  label: 'Attendance',
                 ),
-                BarItem(
-                  filledIcon: Icons.calendar_month,
-                  outlinedIcon: Icons.calendar_month_outlined,
+                NavBarItem(
+                  icon: Icons.calendar_month_outlined,
+                  activeIcon: Icons.calendar_month,
+                  label: 'Summary',
                 ),
-                BarItem(
-                  filledIcon: Icons.settings,
-                  outlinedIcon: Icons.settings_outlined,
+                NavBarItem(
+                  icon: Icons.settings_outlined,
+                  activeIcon: Icons.settings,
+                  label: 'Settings',
                 ),
               ],
             )
