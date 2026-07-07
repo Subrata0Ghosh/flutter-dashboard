@@ -38,26 +38,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )
           : null,
       bottomNavigationBar: isMobileView
-          ? StyleProvider(
-              style: Style(), // Custom style if needed, but defaults are fine
-              child: ConvexAppBar(
-                style: TabStyle.fixedCircle,
-                backgroundColor: Colors.white,
-                color: AppColors.textMuted,
-                activeColor: AppColors.primary,
-                items: const [
-                  TabItem(icon: Icons.home_rounded, title: 'Home'),
-                  TabItem(icon: Icons.people_alt_outlined, title: 'Employees'),
-                  TabItem(icon: Icons.format_list_bulleted_rounded, title: 'Attendance'),
-                  TabItem(icon: Icons.calendar_month_outlined, title: 'Summary'),
-                  TabItem(icon: Icons.settings_outlined, title: 'Settings'),
-                ],
-                initialActiveIndex: _selectedNavIndex,
-                onTap: (int i) {
-                  // Map the index 4 to Settings (since items are 0-4 now)
-                  setState(() => _selectedNavIndex = i == 4 ? 5 : i); 
-                },
-              ),
+          ? ConvexAppBar(
+              style: TabStyle.fixedCircle,
+              backgroundColor: Colors.white,
+              color: AppColors.textMuted,
+              activeColor: AppColors.primary,
+              items: const [
+                TabItem(icon: Icons.home_rounded, title: 'Home'),
+                TabItem(icon: Icons.people_alt_outlined, title: 'Employees'),
+                TabItem(icon: Icons.format_list_bulleted_rounded, title: 'Attendance'),
+                TabItem(icon: Icons.calendar_month_outlined, title: 'Summary'),
+                TabItem(icon: Icons.settings_outlined, title: 'Settings'),
+              ],
+              initialActiveIndex: _selectedNavIndex,
+              onTap: (int i) {
+                // Map the index 4 to Settings (since items are 0-4 now)
+                setState(() => _selectedNavIndex = i == 4 ? 5 : i); 
+              },
             )
           : null,
       body: LayoutBuilder(
