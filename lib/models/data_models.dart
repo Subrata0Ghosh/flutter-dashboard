@@ -86,13 +86,13 @@ final List<Creator> topCreators = [
   ),
 ];
 
-final List<BirthdayPerson> birthdayPeople = [
-  const BirthdayPerson(name: 'Alice', avatarColor: '#7C3AED', assetPath: 'assets/images/memoji_girl.png'),
-  const BirthdayPerson(name: 'Bob', avatarColor: '#EC4899', assetPath: 'assets/images/memoji_boy.png'),
+const List<BirthdayPerson> birthdayPeople = [
+  BirthdayPerson(name: 'Alice', avatarColor: '#7C3AED', assetPath: 'assets/images/memoji_girl.png'),
+  BirthdayPerson(name: 'Bob', avatarColor: '#EC4899', assetPath: 'assets/images/memoji_boy.png'),
 ];
 
-final List<BirthdayPerson> anniversaryPeople = [
-  const BirthdayPerson(name: 'Jane', avatarColor: '#F97316', assetPath: 'assets/images/memoji_girl.png'),
-  const BirthdayPerson(name: 'John', avatarColor: '#3B82F6', assetPath: 'assets/images/memoji_boy.png'),
-  const BirthdayPerson(name: 'Mike', avatarColor: '#10B981', assetPath: 'assets/images/memoji_boy.png'),
+const List<BirthdayPerson> anniversaryPeople = [
+  BirthdayPerson(name: 'Jane', avatarColor: '#F97316', assetPath: 'assets/images/memoji_girl.png'),
+  BirthdayPerson(name: 'John', avatarColor: '#3B82F6', assetPath: 'assets/images/memoji_boy.png'),
+  BirthdayPerson(name: 'Mike', avatarColor: '#10B981', assetPath: 'assets/images/memoji_boy.png'),
 ];
